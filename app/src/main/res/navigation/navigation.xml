@@ -3,33 +3,35 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/navigation"
-    app:startDestination="@id/menuFragment">
+    app:startDestination="@id/listFragment">
 
     <fragment
-        android:id="@+id/menuFragment"
-        android:name="com.shs.first_project.menu.MenuFragment"
-        android:label="fragment_menu"
-        tools:layout="@layout/fragment_menu" >
+        android:id="@+id/listFragment"
+        android:name="com.shs.date.ListFragment"
+        android:label="fragment_list"
+        tools:layout="@layout/fragment_list" >
         <action
-            android:id="@+id/action_menuFragment_to_mainFragment"
-            app:destination="@id/mainFragment" />
+            android:id="@+id/action_listFragment_to_detailFragment"
+            app:destination="@id/detailFragment" />
+
+        <action
+                android:id="@+id/action_listFragment_to_createFragment"
+                app:destination="@id/createFragment" />
     </fragment>
 
     <fragment
-        android:id="@+id/mainFragment"
-        android:name="com.shs.first_project.MainFragment"
-        android:label="fragment_main"
-        tools:layout="@layout/fragment_main"
+        android:id="@+id/detailFragment"
+        android:name="com.shs.date.DetailFragment"
+        android:label="fragment_detail"
+        tools:layout="@layout/fragment_detail"
         >
-        <action
-            android:id="@+id/action_mainFragment_to_recipeFragment"
-            app:destination="@id/recipeFragment"></action>
+
     </fragment>
     <fragment
-        android:id="@+id/recipeFragment"
-        android:name="com.shs.first_project.RecipeFragment"
-        android:label="fragment_recipe"
-        tools:layout="@layout/fragment_recipe"
+        android:id="@+id/createFragment"
+        android:name="com.shs.date.DetailFragment"
+        android:label="fragment_create"
+        tools:layout="@layout/fragment_create"
         >
     </fragment>
 </navigation>
