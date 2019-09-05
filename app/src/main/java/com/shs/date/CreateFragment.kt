@@ -7,7 +7,6 @@ import android.text.TextWatcher
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.DatePicker
 import android.widget.Toast
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
@@ -17,9 +16,11 @@ import java.time.LocalDate
 
 class CreateFragment() : Fragment() {
     private lateinit var event: Event
+    private var binding: FragmentCreateBinding? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        event = Event("", "", "", "")
     }
 
     override fun onCreateView(
@@ -29,11 +30,16 @@ class CreateFragment() : Fragment() {
         val binding = DataBindingUtil.inflate<FragmentCreateBinding>(
             inflater, R.layout.fragment_create, container, false
         )
-        binding.calendarButton.setOnClickListener {
+        this.binding = binding
+        binding.startDateButton.setOnClickListener {
             // DatePickerDialog
             val today: LocalDate = LocalDate.now()
-
-            val dialog = DatePickerDialog(requireContext(), listener, today.year, today.monthValue, today.dayOfMonth)
+            val dialog = DatePickerDialog(requireContext(), startDateListener, today.year, today.monthValue - 1 , today.dayOfMonth)
+            dialog.show()
+        }
+        binding.endDateButton.setOnClickListener {
+            val today: LocalDate = LocalDate.now()
+            val dialog = DatePickerDialog(requireContext(), endDateListener, today.year, today.monthValue - 1, today.dayOfMonth)
             dialog.show()
         }
         binding.titleEditText.addTextChangedListener(object : TextWatcher {
@@ -44,9 +50,9 @@ class CreateFragment() : Fragment() {
             }
 
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
-               if (s != null) {
-                   event = event.copy(title = s.toString())
-               }
+                if (s != null) {
+                    event = event.copy(title = s.toString())
+                }
             }
         })
 
@@ -63,6 +69,13 @@ class CreateFragment() : Fragment() {
                 }
             }
         })
+
+        binding.createButton.setOnClickListener {
+            Toast.makeText(requireContext(), event.toString(), Toast.LENGTH_LONG).show()
+//            Thread().run {
+//                AppDatabase.getInstances(requireContext().applicationContext).eventDao().insertAll(event)
+//            }
+        }
         return binding.root
     }
 
@@ -71,12 +84,19 @@ class CreateFragment() : Fragment() {
 
     }
 
-    private val listener = DatePickerDialog.OnDateSetListener { view, year, monthOfYear, dayOfMonth ->
-        Toast.makeText(
-            requireContext().applicationContext,
-            "$year 년 $monthOfYear 월 $dayOfMonth 일",
-            Toast.LENGTH_SHORT
-        ).show();
+    /**
+     *  val df: DateFormat = SimpleDateFormat("yyyy-MM-dd")
+    val selectedDate = df.parse("$year-$monthOfYear-$dayOfMonth")
+
+     */
+    private val startDateListener = DatePickerDialog.OnDateSetListener { view, year, monthOfYear, dayOfMonth ->
+        event = event.copy(startDate = "$year-${monthOfYear + 1}-$dayOfMonth")
+        binding?.startDateButton?.text = event.startDate
+    }
+
+    private val endDateListener = DatePickerDialog.OnDateSetListener { view, year, monthOfYear, dayOfMonth ->
+        event = event.copy(endDate = "$year-${monthOfYear + 1}-$dayOfMonth")
+        binding?.endDateButton?.text = event.endDate
     }
 
 }
