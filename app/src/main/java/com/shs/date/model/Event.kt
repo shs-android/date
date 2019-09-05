@@ -10,5 +10,5 @@ data class Event(
     @ColumnInfo(name = "title")val title: String,
     @ColumnInfo(name = "start_date")val startDate: String,
     @ColumnInfo(name = "end_date")val endDate: String,
-    @ColumnInfo(name = "content")val content: String
+    @ColumnInfo(name = "memo")val memo: String
 )
